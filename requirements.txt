@@ -3,6 +3,7 @@ torch
 ee
 geemap
 rasterio
+libgdal-dev
 gdal
 geopandas
 shapely
