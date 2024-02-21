@@ -3,7 +3,7 @@ torch
 ee
 geemap
 rasterio
-gdal
+gdal==3.2.2
 geopandas
 shapely
 scikit-image
