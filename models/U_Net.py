@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from Models.BuildingBlocks import *
+from models.BuildingBlocks import *
 
 class FE(nn.Module):
     """
