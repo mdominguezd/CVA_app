@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from streamlit_folium import st_folium
 import sys
 
-from Models import U_Net, U_Net_DANN
+from models import U_Net, U_Net_DANN
 
 from get_image import get_image, crop_image
 from DL_backend import Img_Dataset, predict_cashew
