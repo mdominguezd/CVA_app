@@ -1,0 +1,15 @@
+numpy
+torch
+geopandas
+owslib
+shapely
+pandas
+matplotlib
+dash
+plotly
+pillow
+folium
+streamlit
+deta
+pyogrio
+streamlit-folium
