@@ -5,8 +5,9 @@ import contextlib
 import matplotlib.pyplot as plt
 from streamlit_folium import st_folium
 import sys
+import pathlib
 
-sys.path.append("/mount/src/cva_app/")
+sys.path.append(str(pathlib.Path().absolute()).split("/src")[0] + "/src")
 
 from models import U_Net, U_Net_DANN
 
