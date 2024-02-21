@@ -17,14 +17,10 @@ json_object = json.dumps(json_object)
 credentials = ee.ServiceAccountCredentials(service_account, key_data=json_object)
 ee.Initialize(credentials)
 
-# ee.Initialize()
-
 platform = 'projects/planet-nicfi/assets/basemaps/africa'
 
 Pl = (ee.ImageCollection(platform)
       .select(['B','G','R','N']))
-
-ee.Initialize()
 
 def get_image(coordinates, radius, what_img, model, year = '2016'):
     

@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from streamlit_folium import st_folium
 import sys
 
-sys.path.append('../Models/Networks')
-from U_Net import *
+from Models import U_Net, U_Net_DANN
+
 from get_image import get_image, crop_image
 from DL_backend import Img_Dataset, predict_cashew
 
@@ -57,17 +57,16 @@ Draw(draw_options = {'polyline' : False, 'polygon': False, 'rectangle' : False, 
 map = st_folium(m, width = 700, height = 500, returned_objects = ['last_active_drawing'])
 
 if map['last_active_drawing'] != None:
-    
-    coordinates = list(map['last_active_drawing']['geometry']['coordinates'])
-    
-    with contextlib.suppress(PermissionError):
-        im = get_image(coordinates, radius = 2000, what_img = planet_img, model = model, year = year)
-        crop_image()
 
-    if (model == 'Target-only') | (model == 'DANN'):
-        DS = Img_Dataset('test', norm = 'Linear_1_99', VI = False, domain = 'target')
-    elif model == 'Source-only':
-        DS = Img_Dataset('test', norm = 'Linear_1_99', VI = False, domain = 'target')
+    with st.spinner('Wait for it...'):
     
-
-    predict_cashew(DS, model)
+        coordinates = list(map['last_active_drawing']['geometry']['coordinates'])
+        
+        with contextlib.suppress(PermissionError):
+            im = get_image(coordinates, radius = 2000, what_img = planet_img, model = model, year = year)
+            
+            crop_image()
+    
+        DS = Img_Dataset('test', norm = 'Linear_1_99', VI = True, domain = 'target')        
+    
+        predict_cashew(DS, model)
