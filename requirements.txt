@@ -1,5 +1,8 @@
 numpy
 torch
+ee
+geemap
+osgeo
 geopandas
 owslib
 shapely

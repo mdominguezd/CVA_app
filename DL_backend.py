@@ -12,9 +12,6 @@ import pandas as pd
 import streamlit as st
 from matplotlib.colors import LinearSegmentedColormap
 
-sys.path.append('../Models/Networks')
-from U_Net import *
-
 # These values were calculated using the histograms on notebook 01_02_DataDistributionShift.ipynb
 oneperc_CIV = [231.0,	544.0,	417.0,	2175.0]
 ninenine_CIV = [544.0,	894.0,	971.0,	3739.0]
@@ -81,13 +78,13 @@ class Img_Dataset(Dataset):
 def predict_cashew(DS, model = 'Target-only'):
     
     if model == 'Target-only':
-        model = torch.load('../Models/Experiments/Linear_1_99_Normalization/BestModel_TargetFocal.pt')
+        model = torch.load('models/Tanzania.pt').to('cpu')
         model.eval()
     elif model == 'Source-only':
-        model = torch.load('../Models/Experiments/Linear_1_99_Normalization/BestModel_SourceFocal.pt')
+        model = torch.load('models/IvoryCoast.pt').to('cpu')
         model.eval()
     elif model == 'DANN':
-        model = torch.load('../Models/Experiments/Linear_1_99_Normalization/BestModelDANN.pt')
+        model = torch.load('models/DANN.pt').to('cpu')
         model.eval()
 
     colors = [(0,0,0,0.01), (0,0.9,0.9,0.4)]
@@ -98,7 +95,7 @@ def predict_cashew(DS, model = 'Target-only'):
     
     for i in range(9):
         
-        img = DS.__getitem__(i)[None,:,:,:].to('cuda')
+        img = DS.__getitem__(i)[None,:,:,:].to('cpu')
 
         # im = io.imread(fname = 'test/crop_{:03d}'.format(i) + '.tif').astype(np.float32)
         im = torch.permute(img, (0,2,3,1))[0].cpu().numpy()
