@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from streamlit_folium import st_folium
 import sys
 
+sys.path.append("/mount/src/cva_app/")
+
 from models import U_Net, U_Net_DANN
 
 from get_image import get_image, crop_image
