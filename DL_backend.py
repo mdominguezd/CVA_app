@@ -78,13 +78,13 @@ class Img_Dataset(Dataset):
 def predict_cashew(DS, model = 'Target-only'):
     
     if model == 'Target-only':
-        model = torch.load('models_trained/Tanzania.pt').to('cpu')
+        model = torch.load('models_trained/Tanzania.pt', map_location=torch.device('cpu'))
         model.eval()
     elif model == 'Source-only':
-        model = torch.load('models_trained/IvoryCoast.pt').to('cpu')
+        model = torch.load('models_trained/IvoryCoast.pt', map_location=torch.device('cpu'))
         model.eval()
     elif model == 'DANN':
-        model = torch.load('models_trained/DANN.pt').to('cpu')
+        model = torch.load('models_trained/DANN.pt', map_location=torch.device('cpu'))
         model.eval()
 
     colors = [(0,0,0,0.01), (0,0.9,0.9,0.4)]

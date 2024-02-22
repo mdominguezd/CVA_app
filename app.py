@@ -9,10 +9,6 @@ import pathlib
 
 import os
 
-print('PATH IS::: ', os.getcwd())
-
-print('DIRS::: ', os.listdir())
-
 # This adds the path of the …/src folder
 # to the PYTHONPATH variable
 sys.path.append("/mount/src/cva_app/")
