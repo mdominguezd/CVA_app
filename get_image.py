@@ -5,6 +5,7 @@ import numpy as np
 import rasterio 
 import json
 import streamlit as st
+import os
 
 json_data = st.secrets["json_data"]
 
