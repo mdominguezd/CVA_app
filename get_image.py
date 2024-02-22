@@ -22,6 +22,9 @@ platform = 'projects/planet-nicfi/assets/basemaps/africa'
 Pl = (ee.ImageCollection(platform)
       .select(['B','G','R','N']))
 
+if 'test' not in os.listdir():
+    os.mkdir('test')
+
 def get_image(coordinates, radius, what_img, model, year = '2016'):
     
     platform = 'projects/planet-nicfi/assets/basemaps/africa'
