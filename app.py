@@ -44,13 +44,13 @@ tile = folium.TileLayer(
         control = True
        ).add_to(m)
 
-folium.GeoJson('../Data/Vector/Cashew_Polygons_TNZ_splitted_KM.geojson',
-               tooltip=folium.GeoJsonTooltip(fields=['split'])
-              ).add_to(m)
+# folium.GeoJson('../Data/Vector/Cashew_Polygons_TNZ_splitted_KM.geojson',
+#                tooltip=folium.GeoJsonTooltip(fields=['split'])
+#               ).add_to(m)
 
-folium.GeoJson('../Data/Vector/Cashew_Polygons_CIV_splitted_KM.geojson',
-               tooltip=folium.GeoJsonTooltip(fields=['split'])
-              ).add_to(m)
+# folium.GeoJson('../Data/Vector/Cashew_Polygons_CIV_splitted_KM.geojson',
+#                tooltip=folium.GeoJsonTooltip(fields=['split'])
+#               ).add_to(m)
     
 Draw(draw_options = {'polyline' : False, 'polygon': False, 'rectangle' : False, 'circle' : False, 'circlemarker' : False}).add_to(m)
 
