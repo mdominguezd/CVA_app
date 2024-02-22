@@ -7,6 +7,10 @@ from streamlit_folium import st_folium
 import sys
 import pathlib
 
+import os
+
+print(os.getcwd())
+
 # This adds the path of the …/src folder
 # to the PYTHONPATH variable
 sys.path.append("/mount/src/cva_app/")
