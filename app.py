@@ -9,9 +9,9 @@ import pathlib
 
 # This adds the path of the …/src folder
 # to the PYTHONPATH variable
-sys.path.append(str(pathlib.Path().absolute()).split("/src")[0] + "/src")
+sys.path.append("/mount/src/cva_app/")
 
-import U_Net, U_Net_DANN
+from Models import U_Net, U_Net_DANN
 from get_image import get_image, crop_image
 from DL_backend import Img_Dataset, predict_cashew
 
