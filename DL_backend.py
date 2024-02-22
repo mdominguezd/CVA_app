@@ -13,11 +13,11 @@ import streamlit as st
 from matplotlib.colors import LinearSegmentedColormap
 
 # These values were calculated using the histograms on notebook 01_02_DataDistributionShift.ipynb
-oneperc_CIV = [231.0,	544.0,	417.0,	2175.0]
-ninenine_CIV = [544.0,	894.0,	971.0,	3739.0]
+oneperc_CIV = [217.0,	528.0,	389.0,	2162.0]
+ninenine_CIV = [542.0,	896.0,	984.0,	3877.0]
 
-oneperc_TNZ = [209.00,	483.35,	335.00,	2560.00]
-ninenine_TNZ = [416.00,	723.65,	751.00,	3818.00]
+oneperc_TNZ = [209.0, 483.35, 335.0, 2560.0]
+ninenine_TNZ = [416.0, 723.65, 751.0, 3818.0]
 
 class Img_Dataset(Dataset):
     """Specially adapted for dashboard"""
