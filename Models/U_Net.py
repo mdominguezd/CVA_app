@@ -255,30 +255,30 @@ class UNetDANN(nn.Module):
             if module.bias is not None:
                 module.bias.data.zero_()
 
-class disc(nn.Module):
-    def __init__(self, in_feat, bilinear=True, starter = 8, up_layer = 3, resunet = False, grad_rev_w = 1):
+# class disc(nn.Module):
+#     def __init__(self, in_feat, bilinear=True, starter = 8, up_layer = 3, resunet = False, grad_rev_w = 1):
 
-        super(disc, self).__init__()
+#         super(disc, self).__init__()
 
-        self.bilinear = bilinear
-        self.starter = starter
-        self.up_layer = up_layer
-        self.in_feat = in_feat
-        self.resunet = resunet
-        self.grad_rev_w = grad_rev_w
+#         self.bilinear = bilinear
+#         self.starter = starter
+#         self.up_layer = up_layer
+#         self.in_feat = in_feat
+#         self.resunet = resunet
+#         self.grad_rev_w = grad_rev_w
 
-        self.D = (D(initial_features=self.in_feat, bilinear = self.bilinear, starter = self.starter, up_layer = self.up_layer, resunet = self.resunet, grad_rev_w = self.grad_rev_w))
+#         self.D = (D(initial_features=self.in_feat, bilinear = self.bilinear, starter = self.starter, up_layer = self.up_layer, resunet = self.resunet, grad_rev_w = self.grad_rev_w))
 
-    def forward(self, x, grad_rev_w):
+#     def forward(self, x, grad_rev_w):
 
-        disc = self.D(x, grad_rev_w)
+#         disc = self.D(x, grad_rev_w)
 
-        return disc
+#         return disc
 
-    def _init_weights(self, module):
-        if isinstance(module, nn.Conv2d):
-            nn.init.xavier_normal_(module.weight)
-            if module.bias is not None:
-                module.bias.data.zero_()
-        if isinstance(module, nn.Linear):
-            nn.init.xavier_normal_(module.weight)
+#     def _init_weights(self, module):
+#         if isinstance(module, nn.Conv2d):
+#             nn.init.xavier_normal_(module.weight)
+#             if module.bias is not None:
+#                 module.bias.data.zero_()
+#         if isinstance(module, nn.Linear):
+#             nn.init.xavier_normal_(module.weight)

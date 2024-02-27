@@ -19,6 +19,8 @@ ninenine_CIV = [542.0,	896.0,	984.0,	3877.0]
 oneperc_TNZ = [209.0, 483.35, 335.0, 2560.0]
 ninenine_TNZ = [416.0, 723.65, 751.0, 3818.0]
 
+
+
 class Img_Dataset(Dataset):
     """Specially adapted for dashboard"""
     def __init__(self, img_folder, transform = None, norm = 'Linear_1_99', VI = True, domain = 'target'):
@@ -50,7 +52,7 @@ class Img_Dataset(Dataset):
             img = io.imread(fname = self.img_folder + '/crop_{:03d}'.format(idx) + '.tif').astype(np.float32)
 
         if self.VI:
-            ndvi = (img[:,:,3] - img[:,:,2])/(img[:,:,3] + img[:,:,2])
+            ndvi = (img[:,:,3] - img[:,:,2])/(img[:,:,3] + img[:,:,2]) 
             ndwi = (img[:,:,1] - img[:,:,3])/(img[:,:,3] + img[:,:,1])
 
         if self.norm == 'Linear_1_99':
@@ -75,15 +77,15 @@ class Img_Dataset(Dataset):
 
         return img
 
-def predict_cashew(DS, model = 'Target-only'):
+def predict_cashew(DS, model_name = 'Target-only'):
     
-    if model == 'Target-only':
+    if model_name == 'Target-only':
         model = torch.load('models_trained/Tanzania.pt', map_location=torch.device('cpu'))
         model.eval()
-    elif model == 'Source-only':
+    elif model_name == 'Source-only':
         model = torch.load('models_trained/IvoryCoast.pt', map_location=torch.device('cpu'))
         model.eval()
-    elif model == 'DANN':
+    elif model_name == 'DANN':
         model = torch.load('models_trained/DANN.pt', map_location=torch.device('cpu'))
         model.eval()
 
@@ -97,25 +99,19 @@ def predict_cashew(DS, model = 'Target-only'):
         
         img = DS.__getitem__(i)[None,:,:,:].to('cpu')
 
-        # im = io.imread(fname = 'test/crop_{:03d}'.format(i) + '.tif').astype(np.float32)
         im = torch.permute(img, (0,2,3,1))[0].cpu().numpy()
-        print(im.shape)
-        
-        # if model == 'Target-only':
-        #     for i in range(im.shape[-1]):
-        #         im[:,:,i] = (im[:,:,i] - oneperc_TNZ[i])/(ninenine_TNZ[i] - oneperc_TNZ[i])
-        # else:
-        #     for i in range(im.shape[-1]):
-        #         im[:,:,i] = (im[:,:,i] - oneperc_CIV[i])/(ninenine_CIV[i] - oneperc_CIV[i])
 
-        # im[im>1] = 0.9999
-        # im[im<0] = 0.0001
+        preds = model(img)[0]
 
-        # print(im)
+        if model_name == 'DANN':
+            pred = preds[0].max(0)[1].detach().numpy().to('cpu')
+        else:
+            preds = preds.max(0)[1].to('cpu')
 
-        preds = model(img)[0].max(0)[1].to('cpu')
-            
-        ax[round(9*(i/3 - i//3))//3, i//3].imshow(im[:,:,[2,1,0]])
+        im = io.imread('test/crop_{:03}.tif'.format(i))[:,:,[2,1,0]]/1500
+                
+        ax[round(9*(i/3 - i//3))//3, i//3].imshow(im)
+            # im[:,:,[2,1,0]])
         ax[round(9*(i/3 - i//3))//3, i//3].imshow(preds, cmap = cmap)
 
         ax[round(9*(i/3 - i//3))//3, i//3].tick_params(axis='x',          # changes apply to the x-axis

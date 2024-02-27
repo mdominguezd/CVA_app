@@ -8,9 +8,6 @@ class DoubleConv(nn.Module):
 
     def __init__(self, in_channels, out_channels, mid_channels=None, resunet = False):
         super().__init__()
-        self.in_channels = in_channels
-        self.out_channels = out_channels
-        self.mid_channels = mid_channels
         self.resunet = resunet
         
         if not mid_channels:
@@ -39,14 +36,10 @@ class DoubleConv(nn.Module):
 
 
 class Down(nn.Module):
-    """Downsampling with maxpool then double conv"""
+    """Downscaling with maxpool then double conv"""
 
     def __init__(self, in_channels, out_channels, resunet = False):
         super().__init__()
-        
-        self.in_channels = in_channels
-        self.out_channels = out_channels
-        self.resunet = resunet
         
         self.maxpool_conv = nn.Sequential(
             nn.MaxPool2d(2),
@@ -58,15 +51,10 @@ class Down(nn.Module):
 
 
 class Up(nn.Module):
-    """Upsampling then double conv"""
+    """Upscaling then double conv"""
 
     def __init__(self, in_channels, out_channels, bilinear=True, attention = False, resunet = False):
         super().__init__()
-        
-        self.in_channels = in_channels
-        self.out_channels = out_channels
-        self.resunet = resunet
-        self.bilinear = bilinear
         self.attention = attention
 
         # if bilinear, use the normal convolutions to reduce the number of channels
@@ -99,24 +87,46 @@ class Up(nn.Module):
 
 
 class OutConv(nn.Module):
-    """
-        Final convolutional layer used for segmentation purposes.
-    """
     def __init__(self, in_channels, out_channels):
         super(OutConv, self).__init__()
-        self.in_channels =  in_channels
-        self.out_channels =    out_channels
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
 
     def forward(self, x):
         x = self.conv(x)
         return x
 
+####### SPECIFIC FOR UNET-DANN ########
+### Gradient Reversal Layer
+# Adapted from: https://github.com/tadeephuy/GradientReversal/tree/master
+
+# class GradientReversal(Function):
+#     @staticmethod
+#     def forward(ctx, x, alpha):
+#         ctx.save_for_backward(x, alpha)
+#         return x
+
+#     @staticmethod
+#     def backward(ctx, grad_output):
+#         grad_input = None
+#         _, alpha = ctx.saved_tensors
+#         if ctx.needs_input_grad[0]:
+#             grad_input = - alpha*grad_output
+#         return grad_input, None
+
+# revgrad = GradientReversal.apply
+
+# class GradientReversal(nn.Module):
+#     def __init__(self, alpha = 1):
+#         super().__init__()
+#         self.alpha = torch.tensor(alpha, requires_grad=False)
+
+#     def forward(self, x):
+#         return revgrad(x, self.alpha)
 
 class OutDisc(nn.Module):
     def __init__(self, in_feat, mid_layers):
         super(OutDisc, self).__init__()
-        self.disc = nn.Sequential(
+        self.D = nn.Sequential(
             nn.Flatten(),
             nn.Linear(in_features=in_feat, out_features=mid_layers, bias = False),
             nn.ReLU(),
@@ -126,7 +136,7 @@ class OutDisc(nn.Module):
         )
 
     def forward(self, x):
-        return self.disc(x)
+        return self.D(x)
 
 # https://github.com/CuthbertCai/pytorch_DANN/tree/master
 
@@ -156,10 +166,6 @@ class Attention_block(nn.Module):
     def __init__(self,F_g,F_l,F_int):
         
         super(Attention_block,self).__init__()
-        
-        self.F_g = F_g
-        self.F_l = F_l
-        self.F_int = F_int
         
         self.W_g = nn.Sequential(
             nn.Conv2d(F_g, F_int, kernel_size=1,stride=1,padding=0,bias=True),

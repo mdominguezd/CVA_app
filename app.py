@@ -31,8 +31,6 @@ if planet_img == 'median':
     year = st.sidebar.slider('Year:',2015, 2022, 2018, step = 1)
     year = str(year)
 
-st.write('Predicting with model: ' + str(model))
-
 m = folium.Map(location = [7,10], zoom_start = 3)
 tile = folium.TileLayer(
         tiles = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -64,7 +62,7 @@ map = st_folium(m, width = 700, height = 500, returned_objects = ['last_active_d
 
 if map['last_active_drawing'] != None:
 
-    with st.spinner('Wait for it...'):
+    with st.spinner('Gathering planet images from Google Earth Engine and predicting Cashew crops with '+model+' model...'):
     
         coordinates = list(map['last_active_drawing']['geometry']['coordinates'])
         
