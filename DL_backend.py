@@ -104,16 +104,18 @@ def predict_cashew(DS, model_name = 'Target-only'):
         preds = model(img)[0]
 
         if model_name == 'DANN':
-            pred = preds[0].max(0)[1].detach().numpy().to('cpu')
+            preds = preds[0].max(0)[1].to('cpu')
         else:
             preds = preds.max(0)[1].to('cpu')
 
-        im = io.imread('test/crop_{:03}.tif'.format(i))[:,:,[2,1,0]]/1500
+        im = io.imread('test/crop_{:03}.tif'.format(i))[:,:,[2,1,0]]
+        im[:,:,2] = im[:,:,2]*1.1 #Blue correction
+        im = (im - 250)/(1000 - 250)
                 
         ax[round(9*(i/3 - i//3))//3, i//3].imshow(im)
-            # im[:,:,[2,1,0]])
         ax[round(9*(i/3 - i//3))//3, i//3].imshow(preds, cmap = cmap)
 
+        # Remove axes labels
         ax[round(9*(i/3 - i//3))//3, i//3].tick_params(axis='x',          # changes apply to the x-axis
                         which='both',      # both major and minor ticks are affected
                         bottom=False,      # ticks along the bottom edge are off
