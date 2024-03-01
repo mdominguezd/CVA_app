@@ -30,6 +30,8 @@ planet_img = st.sidebar.radio('Select a planet image:',['median', 'latest'])
 if planet_img == 'median':
     year = st.sidebar.slider('Year:',2015, 2022, 2018, step = 1)
     year = str(year)
+else:
+    year = '2024'
 
 st.write('Draw a marker in the area of the map where you want to predict Cashew crops:')
 
