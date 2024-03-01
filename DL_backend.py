@@ -105,7 +105,7 @@ def predict_cashew(DS, model_name = 'Target-only'):
         
 
         if model_name == 'DANN':
-            domain = preds[1].to('cpu')
+            domain = preds[1].to('cpu').numpy()
             preds = preds[0][0].max(0)[1].to('cpu')
         else:
             preds = preds[0].max(0)[1].to('cpu')
@@ -140,7 +140,7 @@ def predict_cashew(DS, model_name = 'Target-only'):
     st.pyplot(fig)
 
     if model_name == 'DANN':
-        return domain
+        return str(['Source' if d ==1 else 'Target' for d in domain])
     else:
         return 'No domain predicted'
     
