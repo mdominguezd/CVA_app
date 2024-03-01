@@ -101,12 +101,14 @@ def predict_cashew(DS, model_name = 'Target-only'):
 
         im = torch.permute(img, (0,2,3,1))[0].cpu().numpy()
 
-        preds = model(img)[0]
+        preds = model(img)
+        
 
         if model_name == 'DANN':
-            preds = preds[0].max(0)[1].to('cpu')
+            domain = pred[1]
+            preds = preds[0][0].max(0)[1].to('cpu')
         else:
-            preds = preds.max(0)[1].to('cpu')
+            preds = preds[0].max(0)[1].to('cpu')
 
         im = io.imread('test/crop_{:03}.tif'.format(i))[:,:,[2,1,0]]
         im[:,:,2] = im[:,:,2]*1.1 #Blue correction
@@ -136,6 +138,12 @@ def predict_cashew(DS, model_name = 'Target-only'):
     plt.tight_layout()
     
     st.pyplot(fig)
+
+    if model_name == 'DANN':
+        return domain
+    else:
+        return 'No domain predicted'
+    
 
 
 

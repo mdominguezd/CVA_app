@@ -27,15 +27,16 @@ model = st.sidebar.radio('Model:', ['Source-only', 'Target-only', 'DANN'])
 
 planet_img = st.sidebar.radio('Select a planet image:',['median', 'latest'])
 
-run = st.sidebar.button('RUN')
-
 if planet_img == 'median':
     year = st.sidebar.slider('Year:',2015, 2022, 2018, step = 1)
     year = str(year)
 else:
     year = '2024'
 
-st.markdown('## Draw a marker in the area of the map where you want to predict Cashew crops:')
+run = st.sidebar.button('RUN')
+
+
+st.markdown('#### Draw a marker in the area of the map where you want to predict Cashew crops:')
 
 m = folium.Map(location = [7,10], zoom_start = 3)
 tile = folium.TileLayer(
@@ -81,4 +82,6 @@ if map['last_active_drawing'] != None:
         
             DS = Img_Dataset('test', norm = 'Linear_1_99', VI = True, domain = 'target')        
         
-            predict_cashew(DS, model)
+            domain = predict_cashew(DS, model)
+
+            st.write('Domain predicted:' + domain)
