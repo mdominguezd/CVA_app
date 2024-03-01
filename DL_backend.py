@@ -105,7 +105,7 @@ def predict_cashew(DS, model_name = 'Target-only'):
         
 
         if model_name == 'DANN':
-            domain = pred[1]
+            domain = preds[1].to('cpu')
             preds = preds[0][0].max(0)[1].to('cpu')
         else:
             preds = preds[0].max(0)[1].to('cpu')
