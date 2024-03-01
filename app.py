@@ -27,13 +27,15 @@ model = st.sidebar.radio('Model:', ['Source-only', 'Target-only', 'DANN'])
 
 planet_img = st.sidebar.radio('Select a planet image:',['median', 'latest'])
 
+run = st.sidebar.button('RUN')
+
 if planet_img == 'median':
     year = st.sidebar.slider('Year:',2015, 2022, 2018, step = 1)
     year = str(year)
 else:
     year = '2024'
 
-st.write('Draw a marker in the area of the map where you want to predict Cashew crops:')
+st.markdown('## Draw a marker in the area of the map where you want to predict Cashew crops:')
 
 m = folium.Map(location = [7,10], zoom_start = 3)
 tile = folium.TileLayer(
@@ -66,15 +68,17 @@ map = st_folium(m, width = 700, height = 500, returned_objects = ['last_active_d
 
 if map['last_active_drawing'] != None:
 
-    with st.spinner('Gathering planet images from Google Earth Engine and predicting Cashew crops with '+model+' model...'):
-    
-        coordinates = list(map['last_active_drawing']['geometry']['coordinates'])
+    if run:
+
+        with st.spinner('Gathering planet images from Google Earth Engine and predicting Cashew crops with '+model+' model...'):
         
-        with contextlib.suppress(PermissionError):
-            im = get_image(coordinates, radius = 2000, what_img = planet_img, model = model, year = year)
+            coordinates = list(map['last_active_drawing']['geometry']['coordinates'])
             
-            crop_image()
-    
-        DS = Img_Dataset('test', norm = 'Linear_1_99', VI = True, domain = 'target')        
-    
-        predict_cashew(DS, model)
+            with contextlib.suppress(PermissionError):
+                im = get_image(coordinates, radius = 2000, what_img = planet_img, model = model, year = year)
+                
+                crop_image()
+        
+            DS = Img_Dataset('test', norm = 'Linear_1_99', VI = True, domain = 'target')        
+        
+            predict_cashew(DS, model)
