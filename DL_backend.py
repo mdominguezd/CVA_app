@@ -94,6 +94,8 @@ def predict_cashew(DS, model_name = 'Target-only'):
     cmap = LinearSegmentedColormap.from_list('name', colors, N=2)
 
     fig, ax = plt.subplots(3,3,figsize = (20, 20))
+
+    domains = []
     
     for i in range(9):
         
@@ -102,10 +104,10 @@ def predict_cashew(DS, model_name = 'Target-only'):
         im = torch.permute(img, (0,2,3,1))[0].cpu().numpy()
 
         preds = model(img)
-        
 
         if model_name == 'DANN':
             domain = preds[1].to('cpu').detach().numpy()
+            damains.append(domain)
             preds = preds[0][0].max(0)[1].to('cpu')
         else:
             preds = preds[0].max(0)[1].to('cpu')
@@ -140,7 +142,7 @@ def predict_cashew(DS, model_name = 'Target-only'):
     st.pyplot(fig)
 
     if model_name == 'DANN':
-        return str(['Source' if d ==1 else 'Target' for d in domain])
+        return str(['Source' if d ==1 else 'Target' for d in domains])
     else:
         return 'No domain predicted'
     
