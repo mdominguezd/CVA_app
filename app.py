@@ -63,7 +63,7 @@ tile = folium.TileLayer(
 #                tooltip=folium.GeoJsonTooltip(fields=['split'])
 #               ).add_to(m)
     
-Draw(draw_options = {'polyline' : False, 'polygon': False, 'rectangle' : False, 'circle' : False, 'circlemarker' : False}).add_to(m)
+Draw(export = True, draw_options = {'polyline' : False, 'polygon': True, 'rectangle' : False, 'circle' : False, 'circlemarker' : False}).add_to(m)
 
 map = st_folium(m, width = 700, height = 500, returned_objects = ['last_active_drawing'])
 
