@@ -1,87 +1,36 @@
 import streamlit as st
-import folium
-from folium.plugins import Draw
-import contextlib
-import matplotlib.pyplot as plt
-from streamlit_folium import st_folium
-import sys
-import pathlib
+from streamlit_extras.switch_page_button import switch_page 
 
-import os
+st.set_page_config(page_title="CVA", page_icon=":deciduous_tree:", initial_sidebar_state="collapsed")
 
-# This adds the path of the …/src folder
-# to the PYTHONPATH variable
-sys.path.append("/mount/src/cva_app/")
+st.markdown("""
+# Welcome to Cashew Vision Adapt (CVA) :deciduous_tree: :satellite:
+""")
 
-# from Models import U_Net, U_Net_DANN
-from get_image import get_image, crop_image
-from DL_backend import Img_Dataset, predict_cashew
+# Center image
+left_co, cent_co,last_co = st.columns(3)
 
-st.set_page_config(page_title="CVA", page_icon=":deciduous_tree:")
+with cent_co:
+    st.image('img/picture_.png')
 
-st.title(':deciduous_tree: CashewVisionAdapt (CVA) :satellite:')
+st.markdown("""
+In this dashboard you will be able to evaluate the performance of the models trained on any chosen year with planet imagery and at any area of interest in Africa using the `Predict cashew` page.
 
-st.sidebar.header('Select Parameters:')
+Additionally, we encourage you to label some cashew polygons on the `Label data` page, export them and send them to us so the predictions of the models can improve.
+""")
 
-model = st.sidebar.radio('Model:', ['Source-only', 'Target-only', 'DANN'])
+col1, col2 = st.columns(2)
 
-planet_img = st.sidebar.radio('Select a planet image:',['median', 'latest'])
-
-if planet_img == 'median':
-    year = st.sidebar.slider('Year:',2015, 2022, 2018, step = 1)
-    year = str(year)
-else:
-    year = '2024'
-
-run = st.sidebar.button('RUN')
-
-
-st.markdown('#### Draw a marker in the area of the map where you want to predict Cashew crops:')
-
-m = folium.Map(location = [7,10], zoom_start = 3)
-tile = folium.TileLayer(
-        tiles = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        attr = 'Esri',
-        name = 'Esri Satellite',
-        overlay = True,
-        control = True
-       ).add_to(m)
-
-tile = folium.TileLayer(
-        tiles = 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
-        attr = 'Esri',
-        name = 'Esri Satellite',
-        overlay = True,
-        control = True
-       ).add_to(m)
-
-# folium.GeoJson('../Data/Vector/Cashew_Polygons_TNZ_splitted_KM.geojson',
-#                tooltip=folium.GeoJsonTooltip(fields=['split'])
-#               ).add_to(m)
-
-# folium.GeoJson('../Data/Vector/Cashew_Polygons_CIV_splitted_KM.geojson',
-#                tooltip=folium.GeoJsonTooltip(fields=['split'])
-#               ).add_to(m)
+with col1:
+    predict = st.button("Predict cashew :deciduous_tree:")
     
-Draw(export = True, draw_options = {'polyline' : False, 'polygon': True, 'rectangle' : False, 'circle' : False, 'circlemarker' : False}).add_to(m)
+    if predict:
+        switch_page("Predict cashew")
 
-map = st_folium(m, width = 700, height = 500, returned_objects = ['last_active_drawing'])
+with col2:
+    label = st.button("Label data :black_square_button: :pencil2:")
+    
+    if label:
+        switch_page("Label data")
 
-if map['last_active_drawing'] != None:
 
-    if run:
-
-        with st.spinner('Gathering planet images from Google Earth Engine and predicting Cashew crops with '+model+' model...'):
-        
-            coordinates = list(map['last_active_drawing']['geometry']['coordinates'])
-            
-            with contextlib.suppress(PermissionError):
-                im = get_image(coordinates, radius = 2000, what_img = planet_img, model = model, year = year)
-                
-                crop_image()
-        
-            DS = Img_Dataset('test', norm = 'Linear_1_99', VI = True, domain = 'target')        
-        
-            domain = predict_cashew(DS, model)
-
-            st.write('Domain predicted:' + domain)
