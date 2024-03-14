@@ -20,11 +20,11 @@ st.set_page_config(page_title="CVA", page_icon=":deciduous_tree:")
 
 st.title(':deciduous_tree: CashewVisionAdapt (CVA) :satellite:')
 
-st.header('Select Parameters:')
+st.header('Select parameters:')
 
 model = st.radio('Model:', ['Source-only', 'Target-only', 'DANN'])
 
-planet_img = st.radio('Select a planet image:',['median', 'latest'])
+planet_img = st.radio('Select a Planet image:',['median', 'latest'])
 
 if planet_img == 'median':
     year = st.slider('Year:',2015, 2022, 2018, step = 1)
@@ -61,7 +61,7 @@ tile = folium.TileLayer(
 #                tooltip=folium.GeoJsonTooltip(fields=['split'])
 #               ).add_to(m)
     
-Draw(export = False, draw_options = {'polyline' : False, 'polygon': False, 'rectangle' : False, 'circle' : False, 'circlemarker' : False}).add_to(m)
+Draw(export = False,  show_geometry_on_click = True, draw_options = {'polyline' : False, 'polygon': False, 'rectangle' : False, 'circle' : False, 'circlemarker' : False}).add_to(m)
 
 map = st_folium(m, width = 700, height = 500, returned_objects = ['last_active_drawing'])
 
@@ -69,7 +69,7 @@ if map['last_active_drawing'] != None:
 
     if run:
 
-        with st.spinner('Gathering planet images from Google Earth Engine and predicting Cashew crops with '+model+' model...'):
+        with st.spinner('Gathering Planet images from Google Earth Engine and predicting cashew crops with '+model+' model...'):
         
             coordinates = list(map['last_active_drawing']['geometry']['coordinates'])
             
