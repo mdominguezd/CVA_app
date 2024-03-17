@@ -3,7 +3,7 @@ import streamlit as st
 from streamlit_folium import st_folium
 from folium.plugins import Draw
 
-st.set_page_config(page_title="CVA", page_icon=":deciduous_tree:")
+st.set_page_config(page_title="CVA", page_icon=":deciduous_tree:", initial_sidebar_state="collapsed")
 
 st.markdown("""
 # :deciduous_tree: CashewVisionAdapt (CVA) :satellite:

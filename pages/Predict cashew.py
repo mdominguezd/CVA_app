@@ -16,7 +16,7 @@ sys.path.append("/mount/src/cva_app/")
 from get_image import get_image, crop_image
 from DL_backend import Img_Dataset, predict_cashew
 
-st.set_page_config(page_title="CVA", page_icon=":deciduous_tree:")
+st.set_page_config(page_title="CVA", page_icon=":deciduous_tree:", initial_sidebar_state="collapsed")
 
 st.title(':deciduous_tree: CashewVisionAdapt (CVA) :satellite:')
 
@@ -82,6 +82,6 @@ if map['last_active_drawing'] != None:
         
             domain = predict_cashew(DS, model)
 
-            st.write("Predictions around: " + str(coordinates[0]) + ', ' + str(coordinates[1]))
+            st.write("Predictions made around: (" + str(coordinates[0]) + ', ' + str(coordinates[1]) + ')')
 
             # st.write('Domain predicted:' + domain)
