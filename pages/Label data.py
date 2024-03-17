@@ -36,7 +36,7 @@ tile = folium.TileLayer(
        ).add_to(m)
     
 Draw(export = True, 
-     filename = domain + 'labels.geojson'
+     filename = domain + 'labels.geojson',
      draw_options = {'polyline' : False, 'polygon': True, 'rectangle' : False, 'circle' : False, 'circlemarker' : False, 'marker' : False}).add_to(m)
 
 map = st_folium(m, width = 700, height = 500, returned_objects = ['last_active_drawing'])
