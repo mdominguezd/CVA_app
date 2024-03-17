@@ -82,4 +82,6 @@ if map['last_active_drawing'] != None:
         
             domain = predict_cashew(DS, model)
 
-            st.write('Domain predicted:' + domain)
+            st.write("Predictions around: " + str(coordinates[0]) + ', ' + str(coordinates[1]))
+
+            # st.write('Domain predicted:' + domain)
