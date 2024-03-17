@@ -16,7 +16,7 @@ E-mail: <martin.dominguezduran@wur.nl>
 
 """)
 
-domain = st.radio('Ivory Coast', ['Ivory Coast', 'Tanzania'])
+domain = st.radio('Select domain', ['Ivory Coast', 'Tanzania'])
 
 m = folium.Map(location = [7,10], zoom_start = 3)
 tile = folium.TileLayer(
